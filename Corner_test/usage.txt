@@ -1,0 +1,8 @@
+// testHarris.cpp is develop with opencv
+// Harris_checkboard without opencv
+// both generate checkboard, testHarris can show, the other just Matrix
+
+./testHarris
+or
+g++ Harris_checkboard.cpp
+./a.out
