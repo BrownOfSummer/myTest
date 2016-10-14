@@ -1,0 +1,38 @@
+.PHONY: debug release clean package
+
+CFLAGS=-Wall -g -I./include
+LDFLAGS=-lm
+OBJECTS=genafp.o global.o utils.o hashtable.o fft_utils.o afpWrap.o
+
+CC := gcc
+all:
+	make genpcm2adna
+	make printadna
+	make analyzectx
+	make testpush
+	make one_on_one
+	make mSyncDistinc
+	make audioDiffThreshold
+	#make shared
+
+genpcm2adna: genpcm2adna.c $(OBJECTS)
+	$(CC) -o genpcm2adna genpcm2adna.c $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+printadna: printadna.c $(OBJECTS)
+	$(CC) -o printadna printadna.c $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+analyzectx: analyzectx.c $(OBJECTS)
+	$(CC) -o analyzectx analyzectx.c $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+testpush: testpush.c $(OBJECTS)
+	$(CC) -o testpush testpush.c $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+one_on_one: one_on_one.c $(OBJECTS)
+	$(CC) -o one_on_one one_on_one.c $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+mSyncDistinc: mSyncDistinc.c $(OBJECTS)
+	$(CC) -o mSyncDistinc mSyncDistinc.c $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+audioDiffThreshold: audioDiffThreshold.c $(OBJECTS)
+	$(CC) -o audioDiffThreshold audioDiffThreshold.c $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+shared: qeWrap.o $(OBJECTS)
+	$(CC) $(OBJECTS) $(CFLAGS) $(LDFLAGS) -o libafp.so -fPIC -shared
+	$(CC) qeWrap.o $(OBJECTS) $(CFLAGS) $(LDFLAGS) -o libqe.so -fPIC -shared
+
+
+clean:
+	rm -f *.o

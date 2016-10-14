@@ -1,0 +1,7 @@
+test the fft runing time:
+./testfft tmp.pcm
+print: a b c d
+a: sequence
+b: this pcm need totally a ms
+c: each frame need b ms
+d: totally d times fft

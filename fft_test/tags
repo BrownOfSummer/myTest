@@ -1,0 +1,78 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AFP_REAL	fft_utils.h	/^typedef float AFP_REAL;$/;"	t
+Dat	genafp.c	/^} Dat;$/;"	t	typeref:struct:__anon1	file:
+FFTUTILS_H	fft_utils.h	/^#define FFTUTILS_H$/;"	d
+FFT_INFO	fft_utils.h	/^} FFT_INFO;$/;"	t	typeref:struct:_FFT_INFO
+GENERATE_H	genafp.h	/^#define GENERATE_H$/;"	d
+ID	genafp.h	/^    int ID;$/;"	m	struct:__anon3
+MATCH_RESULT	genafp.h	/^}MATCH_RESULT;$/;"	t	typeref:struct:__anon3
+MY_FFT_T	fft_utils.h	/^} MY_FFT_T;$/;"	t	typeref:struct:_MY_FFT_T
+ReadFeatureFromFile	genafp.c	/^uint32_t ReadFeatureFromFile(LANDMARK *lm, uint32_t num, FILE *fp) {$/;"	f
+TIME_FREQUENCY_PEAK	genafp.h	/^} TIME_FREQUENCY_PEAK;$/;"	t	typeref:struct:__anon2
+WISLEN	fft_utils.c	/^#define WISLEN /;"	d	file:
+Wisfile	fft_utils.h	/^	char *Wisfile;$/;"	m	struct:_MY_FFT_T
+Wistemplate	fft_utils.c	/^static const  char *Wistemplate = "%s\/.fftwis_%d";$/;"	v	file:
+WriteFeatureToFile	genafp.c	/^uint32_t WriteFeatureToFile(LANDMARK *lm, uint32_t num, FILE *fp) {$/;"	f
+_FFT_INFO	fft_utils.h	/^typedef struct _FFT_INFO$/;"	s
+_MY_FFT_T	fft_utils.h	/^typedef struct _MY_FFT_T {$/;"	s
+a	genafp.h	/^    double a;$/;"	m	struct:__anon2
+add_track	genafp.c	/^void add_track(LANDMARK *L, uint32_t nL, uint16_t ID, HASHTABLE *table) {$/;"	f
+add_track_offset	genafp.c	/^void add_track_offset(LANDMARK *L, uint32_t nL, uint16_t ID, HASHTABLE *table, uint16_t t0) {$/;"	f
+best	genafp.h	/^    int best;$/;"	m	struct:__anon3
+bitrv2	fft/fft4f.c	/^void bitrv2(int n, int *ip, float *a)$/;"	f
+cdft	fft/fft4f.c	/^void cdft(int n, int isgn, float *a, int *ip, float *w)$/;"	f
+cftsub	fft/fft4f.c	/^void cftsub(int n, float *a, float *w)$/;"	f
+cmp	genafp.c	/^int cmp(const void *a1, const void *b1) {$/;"	f
+cmp1	genafp.c	/^int cmp1(const void *a1, const void *b1) {$/;"	f
+cmp2	genafp.c	/^int cmp2(const void *a1, const void *b1) {$/;"	f
+cmpLM	genafp.c	/^int cmpLM(const void *a1, const void *b1) {$/;"	f
+dctsub	fft/fft4f.c	/^void dctsub(int n, float *a, int nc, float *c)$/;"	f
+ddct	fft/fft4f.c	/^void ddct(int n, int isgn, float *a, int *ip, float *w)$/;"	f
+ddst	fft/fft4f.c	/^void ddst(int n, int isgn, float *a, int *ip, float *w)$/;"	f
+dfct	fft/fft4f.c	/^void dfct(int n, float *a, float *t, int *ip, float *w)$/;"	f
+dfst	fft/fft4f.c	/^void dfst(int n, float *a, float *t, int *ip, float *w)$/;"	f
+dstsub	fft/fft4f.c	/^void dstsub(int n, float *a, int nc, float *c)$/;"	f
+eps	genafp.c	/^const double eps = 1e-12;$/;"	v
+f	genafp.h	/^    int32_t t, f;$/;"	m	struct:__anon2
+fft_buf	fft_utils.h	/^	float *fft_buf, *w;$/;"	m	struct:_FFT_INFO
+fft_close	fft_utils.c	/^void fft_close(MY_FFT_T *work)$/;"	f
+fft_init	fft_utils.c	/^MY_FFT_T *fft_init(unsigned int nfft)$/;"	f
+fft_it	fft_utils.c	/^void fft_it(const int16_t *indata, uint32_t n, double *outdata, FFT_INFO *finfo) {$/;"	f
+fft_it	fft_utils.c	/^void fft_it(unsigned int nfft, const int16_t* in_data0, double* out_data0,$/;"	f
+fft_once	genafp.c	/^static int32_t fft_once(const int16_t *indata, int n, int window, int overlap, double *outdata) {$/;"	f	file:
+fft_once	main.c	/^static int32_t fft_once(const int16_t *indata, int n, int window, int overlap, double *outdata) {$/;"	f	file:
+findPeaks	genafp.c	/^static int findPeaks(const double *data, int len, int width, int offset, int N, int spreadRate, int maxPksPerFrame, TIME_FREQUENCY_PEAK *maxes) {$/;"	f	file:
+finfo_close	fft_utils.c	/^void finfo_close(FFT_INFO *finfo)$/;"	f
+finfo_init	fft_utils.c	/^int finfo_init(FFT_INFO *finfo, unsigned n)$/;"	f
+genafp	genafp.c	/^int genafp(const short *tmp, int len, LANDMARK *LM, int start_t, int *pLM_t) {$/;"	f
+getSequentialScore	genafp.c	/^static void getSequentialScore(const HASH_RECORD *Rt, uint32_t len, MATCH_RESULT *R) {$/;"	f	file:
+get_time	genafp.c	/^uint16_t get_time(LANDMARK *L) {$/;"	f
+in	fft_utils.h	/^	fftwf_complex *in;$/;"	m	struct:_MY_FFT_T
+ip	fft_utils.h	/^	int *ip;$/;"	m	struct:_FFT_INFO
+load_wisdom	fft_utils.c	/^static int load_wisdom(MY_FFT_T *work, int nfft)$/;"	f	file:
+makePairPks	genafp.c	/^static int makePairPks(const TIME_FREQUENCY_PEAK *maxes, int nmaxes, int maxPairsPerPeak, int targetDF, int targetDT, LANDMARK *L, int L_t)$/;"	f	file:
+makect	fft/fft4f.c	/^void makect(int nc, int *ip, float *c)$/;"	f
+makewt	fft/fft4f.c	/^void makewt(int nw, int *ip, float *w)$/;"	f
+match_query	genafp.c	/^int match_query(const LANDMARK *L, int nL, MATCH_RESULT *R, const HASHTABLE *table)$/;"	f
+matches	genafp.h	/^    int matches;$/;"	m	struct:__anon3
+nfft	fft_utils.h	/^	unsigned int nfft;$/;"	m	struct:_FFT_INFO
+out	fft_utils.h	/^	fftwf_complex *out;$/;"	m	struct:_MY_FFT_T
+plan	fft_utils.h	/^	fftwf_plan plan;$/;"	m	struct:_MY_FFT_T
+rdft	fft/fft4f.c	/^void rdft(int n, int isgn, float *a, int *ip, float *w)$/;"	f
+rftsub	fft/fft4f.c	/^void rftsub(int n, float *a, int nc, float *c)$/;"	f
+save_wisdom	fft_utils.c	/^static int save_wisdom(MY_FFT_T *work)$/;"	f	file:
+sdiff_cmp	genafp.c	/^int sdiff_cmp(const void *a, const void *b) {$/;"	f
+set_wisfile	fft_utils.c	/^static int set_wisfile(MY_FFT_T *work, int nfft)$/;"	f	file:
+skew	genafp.h	/^    int64_t skew;$/;"	m	struct:__anon3
+spread	genafp.c	/^static int spread(double *X, uint32_t n, double E)$/;"	f	file:
+stft	fft_utils.c	/^uint32_t stft(const int16_t *indata, uint32_t n, uint32_t window, uint32_t overlap, double *outdata) {$/;"	f
+t	genafp.h	/^    int32_t t, f;$/;"	m	struct:__anon2
+v	genafp.c	/^    int v;$/;"	m	struct:__anon1	file:
+w	fft_utils.h	/^	float *fft_buf, *w;$/;"	m	struct:_FFT_INFO
+wts	fft_utils.h	/^	float *wts;$/;"	m	struct:_FFT_INFO
+x	genafp.c	/^    double x;$/;"	m	struct:__anon1	file:
