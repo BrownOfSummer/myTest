@@ -11,6 +11,7 @@
 int main(int argc, char *argv[])
 {
     //load data.txt
+    //just y = alpha * x + beta
     char line[200];
     int n = 0;
     double sumX = 0.0;
