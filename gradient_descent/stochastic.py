@@ -41,7 +41,7 @@ while True:
     # calc loss function
     error1 = 0
     for lp in range(len(x)):
-        error1 += (y[i]-(theta0 + theta1 * x[i][1] + theta2 * x[i][2]))**2/2
+        error1 += (y[i]-(theta0 + theta1 * x[i][1] + theta2 * x[i][2]))**2
 
     if abs(error1-error0) < epsilon:
         break

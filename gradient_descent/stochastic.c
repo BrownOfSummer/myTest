@@ -51,7 +51,7 @@ int main(void)
         // calc loss function
         error1 = 0;
         for(int i = 0; i < m; i ++){
-            error1 += pow( (y[i] - (theta0 + theta1 * x[i][1] + theta2 * x[i][2])), 2 ) / 2;
+            error1 += pow( (y[i] - (theta0 + theta1 * x[i][1] + theta2 * x[i][2])), 2 ) ;
         }
         double tmp = error1 - error0 >= 0 ? error1 - error0 : error0 - error1;
         if( tmp < epsilon)
