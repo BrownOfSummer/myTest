@@ -1,0 +1,5 @@
+// initially I want to split the struct and functions from opensift to implement the detection of extremum
+// due to it is too complex to copy all the relation files seperately, I gived up here
+// for now, it can find the extremum in dog_pyr, withou the interp
+
+./detect_space_extremums img

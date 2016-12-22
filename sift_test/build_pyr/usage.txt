@@ -1,0 +1,5 @@
+// just a sample from opensift source code
+// implement the function of build_gauss_pyr and the build_dog_pyr
+// input a picture, then return two pyrs
+
+./build_pyr + img

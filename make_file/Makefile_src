@@ -1,0 +1,22 @@
+CC = g++
+CC_1 = gcc
+LINKER = g++
+CFLAGS = -O3 -g -Wall -I include/
+LDLIBS = ../CLAPACK/lapack_LINUX.a ../CLAPACK/blas_LINUX.a ../CLAPACK/F2CLIBS/libf2c.a #-lm -lc
+
+SUFFIXES = .cpp .o
+PROG = refinematch
+OBJS = main.o ImageDNA.o imgfeatures.o kdtree.o refine_match.o rsc_hess.o xform.o minpq.o utils.o
+all:
+	#( cd ../CLAPACK; $(MAKE) )
+	$(MAKE) -C ../CLAPACK all
+	make $(PROG)
+$(PROG): $(OBJS)
+	$(LINKER) -O3 -o $(PROG) $(OBJS) $(LDLIBS)
+.cpp.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+.c.o:
+	$(CC_1) $(CFLAGS) -c $< -o $@
+
+clean:
+	-rm -f $(PROG) *.o

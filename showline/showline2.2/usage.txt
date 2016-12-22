@@ -1,0 +1,8 @@
+output: 
+    master_id_1   offset_1 
+    master_id_2   offset_2 
+    master_id_3   offset_3
+input:
+    sample_time master_time master_id match_score
+(1) bash make.sh
+(2) ./path/showline data.txt /path/outImg.png

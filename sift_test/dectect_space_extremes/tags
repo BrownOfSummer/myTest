@@ -1,0 +1,18 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+IMG_DBL	dectect_space_extremes.cpp	/^#define IMG_DBL /;"	d	file:
+INTVLS	dectect_space_extremes.cpp	/^#define INTVLS /;"	d	file:
+SIFT_CONTR_THR	dectect_space_extremes.cpp	/^#define SIFT_CONTR_THR /;"	d	file:
+SIFT_CURV_THR	dectect_space_extremes.cpp	/^#define SIFT_CURV_THR /;"	d	file:
+SIFT_INIT_SIGMA	dectect_space_extremes.cpp	/^#define SIFT_INIT_SIGMA /;"	d	file:
+SIGMA	dectect_space_extremes.cpp	/^#define SIGMA /;"	d	file:
+build_dog_pyr	sub_functions.cpp	/^static IplImage*** build_dog_pyr( IplImage*** gauss_pyr, int octvs, int intvls )$/;"	f	file:
+build_gauss_pyr	sub_functions.cpp	/^static IplImage*** build_gauss_pyr( IplImage* base, int octvs,$/;"	f	file:
+convert_to_gray32	sub_functions.cpp	/^static IplImage* convert_to_gray32( IplImage* img )$/;"	f	file:
+create_init_img	sub_functions.cpp	/^static IplImage* create_init_img( IplImage* img, int img_dbl, double sigma )$/;"	f	file:
+downsample	sub_functions.cpp	/^static IplImage* downsample( IplImage* img )$/;"	f	file:
+main	dectect_space_extremes.cpp	/^int main(int argc, char *argv[])$/;"	f

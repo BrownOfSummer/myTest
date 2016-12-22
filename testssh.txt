@@ -1,0 +1,35 @@
+ssh admin@someip 
+ssh admin@ip -A
+ssh-keygen
+ssh-agent
+authorized_keys
+agent forward
+-A
+ssh multiplexing
+sshs/
+nc 
+-oProxyCommand
+
+poxy -W
+-R -L -D
+ssh-add
+ssh-add -l
+ProxyCommand ssh admin@bj.ip -W %h:%p
+
+ssh-copy-id remotehost
+
+
+ssh -L 6789:admin@52.78.231.91:22 admin@54.223.158.197
+PubkeyAcceptedType +ssh-dss
+Forwardagent
+ProxyCommand ssh beijing -W %h:%p
+
+DynamicForward 8080
+cat /proc/sys/net/ipv4/ip_local_port_range
+cat /proc/sys/net/ipv4/ip_local_port_range
+Exit
+svn ls https://localhost:5330/svn/_Main_
+host google.com
+nc localhost 8000
+curl -k -H 'www.google.com' https://localhost:8000
+svn ls https://localhost:443/svn/_Main_/netet
