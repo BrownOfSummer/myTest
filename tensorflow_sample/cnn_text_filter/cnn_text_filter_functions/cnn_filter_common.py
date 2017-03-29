@@ -2,7 +2,8 @@
 import os
 import numpy as np
 import time
-import datetime
+from datetime import datetime
+import traceback
 
 import data_helpers
 import tensorflow as tf
@@ -12,8 +13,8 @@ from tensorflow.python.platform import gfile
 from para_config import Config as config_
 
 
-dir_for_right = "./right/"
-dir_for_wrong = "./wrong/"
+#dir_for_right = "./right/"
+#dir_for_wrong = "./wrong/"
 VOCAB_DIR = "./vocab_dir/"
 MODEL_DIR = "./runs/"
 
@@ -24,6 +25,8 @@ def split_text(path_untrain_r, path_untrain_w):
     path_untrain_w: the negative_data_file
     append never_trained file, and generate file for train
     """
+    dir_for_right = os.path.dirname(path_untrain_r)
+    dir_for_wrong = os.path.dirname(path_untrain_w)
     assert os.path.exists(dir_for_right) and os.path.exists(dir_for_wrong)
     r_raw = np.array(open(path_untrain_r, "r").readlines())
     w_raw = np.array(open(path_untrain_w, "r").readlines())
@@ -35,7 +38,7 @@ def split_text(path_untrain_r, path_untrain_w):
         never_trained_w = w_raw[r_len:]
         w_raw = w_raw[:r_len]
         # Save to never_trained file
-        never_trained_path = os.path.join(dir_for_wrong,"never_trained.log")
+        never_trained_path = os.path.join(dir_for_wrong,"never_trained")
         with open(never_trained_path, "a") as fp:
             for line in never_trained_w:
                 fp.write("%s\n" % line.strip())
@@ -43,16 +46,17 @@ def split_text(path_untrain_r, path_untrain_w):
         # No need to cut the wrong data
         pass
     # Write to file training
-    path_for_training_r = os.path.join(dir_for_right, "training.log")
+    path_for_training_r = os.path.join(dir_for_right, "training")
     with open(path_for_training_r, "w") as fp:
         for line in r_raw:
             fp.write("%s\n" % line.strip())
-    path_for_training_w = os.path.join(dir_for_wrong, "training.log")
+    path_for_training_w = os.path.join(dir_for_wrong, "training")
     with open(path_for_training_w, "w") as fp:
         for line in w_raw:
             fp.write("%s\n" % line.strip())
 
 def generate_vocab(path_untrain_r, path_untrain_w):
+    VOCAB_DIR = os.path.join(os.path.dirname(path_untrain_r),"..")
     assert os.path.exists(VOCAB_DIR)
     x_r, x_w, _, _ = data_helpers.load_data_and_labels(path_untrain_r, path_untrain_w)
     vocab_processor = learn.preprocessing.VocabularyProcessor(config_.max_document_length)
@@ -60,7 +64,7 @@ def generate_vocab(path_untrain_r, path_untrain_w):
     # Write vocabulary
     vocab_processor.save(os.path.join(VOCAB_DIR, "vocab"))
 
-def get_checkpoint_file():
+def get_checkpoint_file(MODEL_DIR):
     checkpoint_dir = os.path.join(MODEL_DIR,"checkpoints/")
     assert os.path.exists(checkpoint_dir)
     try:
@@ -84,6 +88,8 @@ def get_checkpoint_file():
         
 def cnn_train(training_r, training_w):
     assert os.path.exists(training_r) and os.path.exists(training_w)
+    VOCAB_DIR = os.path.join(os.path.dirname(training_r),"..")
+    MODEL_DIR = os.path.join(os.path.dirname(training_r),"..","runs")
     print("Loading data...")
     x_train_r, x_train_w, y_train_r, y_train_w = data_helpers.load_data_and_labels(
             training_r, training_w)
@@ -93,8 +99,9 @@ def cnn_train(training_r, training_w):
     try:
         assert os.path.exists(vocab_path)
         vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
-    except:
+    except Exception as e:
         print("Failed to restore vocab")
+        traceback.print_exc()
 
     print("PreProcessing data...")
     # Map words to int vector
@@ -175,7 +182,7 @@ def cnn_train(training_r, training_w):
                 _, step, summaries, loss, accuracy = sess.run(
                     [train_op, global_step, train_summary_op, cnn.loss, cnn.accuracy],
                     feed_dict)
-                time_str = datetime.datetime.now().isoformat()
+                time_str = datetime.now().isoformat()
                 print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
                 train_summary_writer.add_summary(summaries, step)
             
@@ -192,10 +199,13 @@ def cnn_train(training_r, training_w):
                     print("Saved model checkpoint to {}\n".format(path))
     end_train = time.time()
     print('Train costs', end_train - start_train)
+    # Need to write the raw data to trained
 
 
-def cnn_retrain(training_r, training_w):
+def cnn_retrain(training_r, training_w, model_dir):
     assert os.path.exists(training_r) and os.path.exists(training_w)
+    VOCAB_DIR = model_dir
+    MODEL_DIR = os.path.join(model_dir,"runs")
     print("Loading data...")
     x_train_r, x_train_w, y_train_r, y_train_w = data_helpers.load_data_and_labels(
             training_r, training_w)
@@ -209,8 +219,9 @@ def cnn_retrain(training_r, training_w):
         vocab_processor.fit(x_train_r + x_train_w)
         if len(vocab_processor.vocabulary_) > config_.max_vocab_keep:
             vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
-    except:
+    except Exception as e:
         print("Failed to restore vocab")
+        traceback.print_exc()
 
     print("PreProcessing data...")
     # Map words to int vector
@@ -227,7 +238,7 @@ def cnn_retrain(training_r, training_w):
     y_train = np.array(list(y_train_r) + list(y_train_w))
 
     print("Get checkpoint_file...")
-    checkpoint_file = get_checkpoint_file()
+    checkpoint_file = get_checkpoint_file(MODEL_DIR)
 
     # Training
     # ==================================================
@@ -272,7 +283,7 @@ def cnn_retrain(training_r, training_w):
                 _, step, summaries, batch_loss, batch_accuracy = sess.run(
                     [train_op, global_step, train_summary_op, loss, accuracy],
                     feed_dict)
-                time_str = datetime.datetime.now().isoformat()
+                time_str = datetime.now().isoformat()
                 print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, batch_loss, batch_accuracy))
                 train_summary_writer.add_summary(summaries, step)
 
@@ -314,6 +325,7 @@ def cnn_retrain(training_r, training_w):
             os.remove("{}.data-00000-of-00001".format(checkpoint_file))
             os.remove("{}.index".format(checkpoint_file))
             os.remove("{}.meta".format(checkpoint_file))
+        # Need to write the raw data to trained
 
 def cnn_query(model_dir, tmp_file_path):
     start_eval = time.time()
