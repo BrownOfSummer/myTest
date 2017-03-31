@@ -13,11 +13,6 @@ from tensorflow.python.platform import gfile
 from para_config import Config as config_
 
 
-#dir_for_right = "./right/"
-#dir_for_wrong = "./wrong/"
-VOCAB_DIR = "./vocab_dir/"
-MODEL_DIR = "./runs/"
-
 def split_text(path_untrain_r, path_untrain_w):
     """
     Para: files from submit
@@ -64,8 +59,36 @@ def generate_vocab(path_untrain_r, path_untrain_w):
     # Write vocabulary
     vocab_processor.save(os.path.join(VOCAB_DIR, "vocab"))
 
+def append_vocab(model_dir, path_untrain_r, path_untrain_w):
+    """
+    Load the vocab and append the vocab
+    Paras:
+    path_untrain_r, path_untrain_w: submit untrain
+    model_dir:  model_dir/vocab
+    """
+    assert os.path.exists(path_untrain_r) and os.path.exists(path_untrain_w)
+    VOCAB_DIR = model_dir
+    x_train_r, x_train_w, y_train_r, y_train_w = data_helpers.load_data_and_labels(
+            path_untrain_r, path_untrain_w)
+    # Restore dictionary
+    print("Restoring and add new word to vocab...")
+    vocab_path = os.path.join(VOCAB_DIR, "vocab")
+    try:
+        assert os.path.exists(vocab_path)
+        vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
+        vocab_processor.vocabulary_.freeze(False)
+        vocab_processor.fit(x_train_r + x_train_w)
+        if len(vocab_processor.vocabulary_) < config_.max_vocab_keep:
+            vocab_processor.save(vocab_path)
+            print("dict_lenght:",len(vocab_processor.vocabulary_))
+        else:
+            print("Warning, new words Failed to append in order not to be out of range the embedding\n")
+    except Exception as e:
+        print("Failed to append vocab")
+        traceback.print_exc()
+
 def get_checkpoint_file(MODEL_DIR):
-    checkpoint_dir = os.path.join(MODEL_DIR,"checkpoints/")
+    checkpoint_dir = os.path.join(MODEL_DIR,"runs/checkpoints/")
     assert os.path.exists(checkpoint_dir)
     try:
         # If the path unchanged
@@ -199,26 +222,32 @@ def cnn_train(training_r, training_w):
                     print("Saved model checkpoint to {}\n".format(path))
     end_train = time.time()
     print('Train costs', end_train - start_train)
-    # Need to write the raw data to trained
 
 
-def cnn_retrain(training_r, training_w, model_dir):
+def cnn_retrain(model_dir, training_r, training_w):
+    """
+    Load the model and retrain the network with new data
+    Paras:
+    training_r, training_w: spliting from submit untrain
+    model_dir: model_dir/runs, model_dir/vocab
+    """
+    start_retrain = time.time()
     assert os.path.exists(training_r) and os.path.exists(training_w)
     VOCAB_DIR = model_dir
-    MODEL_DIR = os.path.join(model_dir,"runs")
+    MODEL_DIR = model_dir
     print("Loading data...")
     x_train_r, x_train_w, y_train_r, y_train_w = data_helpers.load_data_and_labels(
             training_r, training_w)
     # Restore dictionary
-    print("Restoring and add new word to vocab...")
+    print("Restoring word to vocab...")
     vocab_path = os.path.join(VOCAB_DIR, "vocab")
     try:
         assert os.path.exists(vocab_path)
         vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
-        vocab_processor.vocabulary_.freeze(False)
-        vocab_processor.fit(x_train_r + x_train_w)
-        if len(vocab_processor.vocabulary_) > config_.max_vocab_keep:
-            vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
+        #vocab_processor.vocabulary_.freeze(False)
+        #vocab_processor.fit(x_train_r + x_train_w)
+        #if len(vocab_processor.vocabulary_) > config_.max_vocab_keep:
+        #    vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
     except Exception as e:
         print("Failed to restore vocab")
         traceback.print_exc()
@@ -290,7 +319,7 @@ def cnn_retrain(training_r, training_w, model_dir):
             # Collect the predictions here
             all_predictions = []
             # Output directory for models and summaries
-            out_dir = os.path.abspath(MODEL_DIR)
+            out_dir = os.path.join(MODEL_DIR,"runs")
 
             print("Writing to {}\n".format(out_dir))
             # Summaries for loss and accuracy
@@ -309,7 +338,7 @@ def cnn_retrain(training_r, training_w, model_dir):
             saver = tf.train.Saver(tf.global_variables(), max_to_keep=config_.num_checkpoints)
 
             # Write vocabulary
-            vocab_processor.save(os.path.join(VOCAB_DIR, "vocab"))
+            #vocab_processor.save(os.path.join(VOCAB_DIR, "vocab"))
 
             # Generate batches for one epoch
             batches = data_helpers.batch_iter(list(zip(x_train, y_train)), config_.batch_size, config_.num_epochs, shuffle=True)
@@ -325,19 +354,26 @@ def cnn_retrain(training_r, training_w, model_dir):
             os.remove("{}.data-00000-of-00001".format(checkpoint_file))
             os.remove("{}.index".format(checkpoint_file))
             os.remove("{}.meta".format(checkpoint_file))
-        # Need to write the raw data to trained
+    end_retrain = time.time()
+    print("Retrain time:", end_retrain - start_retrain)
 
-def cnn_query(model_dir, tmp_file_path):
+def cnn_query(model_dir, query_file_path):
+    """
+    Query the new data file, return predictions and probability
+    model_dir: model_dir/runs, model_dir/vocab
+    query_file_path: test file
+    """
     start_eval = time.time()
-    x_raw = data_helpers.load_data_and_labels_for_eval(tmp_file_path)
+    x_raw = data_helpers.load_data_and_labels_for_eval(query_file_path)
     # Map data into vocabulary
+    VOCAB_DIR = model_dir
     vocab_path = os.path.join(VOCAB_DIR,"vocab")
     vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
     x_test = np.array(list(vocab_processor.transform(x_raw)))
 
     # Evaluation
     """Get the checkpoint file"""
-    checkpoint_file = get_checkpoint_file()
+    checkpoint_file = get_checkpoint_file(model_dir)
     graph = tf.Graph()
     with graph.as_default():
         session_conf = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
